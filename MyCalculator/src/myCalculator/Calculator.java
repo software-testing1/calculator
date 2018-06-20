@@ -19,47 +19,35 @@ public class Calculator extends JFrame implements ActionListener {
 			"*", "%", "Abs","1", "2", "3", "-", "1/x","Int", "0", "+/-", ".", "+", "=" ,
 			"x^3","Sin","Cos","tan","ln","lg",""};
 	/** 计算器上的功能键的显示名字 */
-	private final String[] COMMAND = { "Backspace", "CE", "C" };
-	/** 计算器左边的M的显示名字 */
-	private final String[] M = { " ", "MC", "MR", "MS", "M+" };
+	private final String[] COMMAND = { "退位", "清除", "归零" };
 	/** 计算器上键的按钮 */
 	private JButton keys[] = new JButton[KEYS.length];
 	/** 计算器上的功能键的按钮 */
 	private JButton commands[] = new JButton[COMMAND.length];
-	/** 计算器左边的M的按钮 */
-	private JButton m[] = new JButton[M.length];
 	/** 计算结果文本框 */
-	private JTextField resultText = new JTextField("0");
+	public JTextField resultText = new JTextField("0");
 
 	// 标志用户按的是否是整个表达式的第一个数字,或者是运算符后的第一个数字
-	private boolean firstDigit = true;
+	public boolean firstDigit = true;
 	// 计算的中间结果。
-	private double resultNum = 0.0;
+	public double resultNum = 0.0;
 	// 当前运算的运算符
-	private String operator = "=";
+	public String operator = "=";
 	// 操作是否合法
-	private boolean operateValidFlag = true;
+	public boolean operateValidFlag = true;
 	private double prenumber = 0.0; 
 	/**
 	 * 构造函数
 	 */
 	public Calculator() {
 		super();
-		
 		// 初始化计算器
 		init();
-		
 		// 设置计算器的背景颜色
 		this.setBackground(Color.LIGHT_GRAY);
-		
 		this.setTitle("科学计算器");
-		
 		// 在屏幕(500, 300)坐标处显示计算器
 		this.setLocation(500, 300);
-		
-		// 不许修改计算器的大小
-		this.setResizable(false);
-		
 		// 使计算器中各组件大小合适
 		this.pack();
 	}
@@ -70,18 +58,14 @@ public class Calculator extends JFrame implements ActionListener {
 	private void init() {
 		// 文本框中的内容采用右对齐方式
 		resultText.setHorizontalAlignment(JTextField.RIGHT);
-		
 		// 不允许修改结果文本框
 		resultText.setEditable(false);
-		
 		// 设置文本框背景颜色为白色
 		resultText.setBackground(Color.WHITE);
-
 		// 初始化计算器上键的按钮，将键放在一个画板内
 		JPanel calckeysPanel = new JPanel();
-		
 		// 用网格布局器，5行，5列的网格，网格之间的水平方向间隔为4个象素，垂直方向间隔为4个象素
-		calckeysPanel.setLayout(new GridLayout(5, 5, 4, 4));
+		calckeysPanel.setLayout(new GridLayout(5, 6, 4, 4));
 		for (int i = 0; i < KEYS.length; i++) {
 			keys[i] = new JButton(KEYS[i]);
 			calckeysPanel.add(keys[i]);
@@ -120,18 +104,8 @@ public class Calculator extends JFrame implements ActionListener {
 			commands[i].setForeground(Color.red);
 		}
 
-		// 初始化M键，用红色标示，将M键放在一个画板内
-		JPanel calmsPanel = new JPanel();
-		// 用网格布局管理器，5行，1列的网格，网格之间的水平方向间隔为3个象素，垂直方向间隔为3个象素
-		calmsPanel.setLayout(new GridLayout(5, 1, 4, 4));
-		for (int i = 0; i < M.length; i++) {
-			m[i] = new JButton(M[i]);
-			calmsPanel.add(m[i]);
-			m[i].setForeground(Color.red);
-		}
-
 		// 下面进行计算器的整体布局，将calckeys和command画板放在计算器的中部，
-		// 将文本框放在北部，将calms画板放在计算器的西部。
+		// 将文本框放在北部
 
 		// 新建一个大的画板，将上面建立的command和calckeys画板放在该画板内
 		JPanel panel1 = new JPanel();
@@ -149,7 +123,7 @@ public class Calculator extends JFrame implements ActionListener {
 		getContentPane().setLayout(new BorderLayout(3, 5));
 		getContentPane().add("North", top);
 		getContentPane().add("Center", panel1);
-		getContentPane().add("West", calmsPanel);
+		
 		
 		// 为各按钮添加事件侦听器
 		// 都使用同一个事件侦听器，即本对象。本类的声明中有implements ActionListener
@@ -158,9 +132,6 @@ public class Calculator extends JFrame implements ActionListener {
 		}
 		for (int i = 0; i < COMMAND.length; i++) {
 			commands[i].addActionListener(this);
-		}
-		for (int i = 0; i < M.length; i++) {
-			m[i].addActionListener(this);
 		}
 	}
 
@@ -171,32 +142,17 @@ public class Calculator extends JFrame implements ActionListener {
 		// 获取事件源的标签
 		String label = e.getActionCommand();
 		if (label.equals(COMMAND[0])) {
-			// 用户按了"Backspace"键
+			// 用户按了"退位"键
 			handleBackspace();
 		} else if (label.equals(COMMAND[1])) {
-			// 用户按了"CE"键
+			// 用户按了"清除"键
 			resultText.setText("0");
 		} else if (label.equals(COMMAND[2])) {
-			// 用户按了"C"键
+			// 用户按了"归零"键
 			handleC();
-		} else if (label.equals(M[1])) {
-			// 用户按了"MC"键
-			handleMC();
-		} else if (label.equals(M[2])) {
-			// 用户按了"MR"键
-			handleMR();
-		} else if (label.equals(M[3])) {
-			// 用户按了"MS"键
-			handleMS();
-		} 
-			else if (label.equals(M[4])) {
-		// 用户按了"M+"键
-		handleMk();
-		} 
-				else if ("0123456789.".indexOf(label) >= 0) {
+		} else if ("0123456789.".indexOf(label) >= 0) {
 			// 用户按了数字键或者小数点键
 			handleNumber(label);
-			// handlezero(zero);
 		} else {
 			// 用户按了运算符键
 			handleOperator(label);
@@ -204,9 +160,9 @@ public class Calculator extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * 处理Backspace键被按下的事件
+	 * 处理退位键被按下的事件
 	 */
-	private void handleBackspace() {
+	public void handleBackspace() {
 		String text = resultText.getText();
 		int i = text.length();
 		if (i > 0) {
@@ -229,7 +185,7 @@ public class Calculator extends JFrame implements ActionListener {
 	 * 
 	 * @param key
 	 */
-	private void handleNumber(String key) {
+	public void handleNumber(String key) {
 		if (firstDigit) {
 			// 输入的第一个数字
 			resultText.setText(key);
@@ -245,9 +201,9 @@ public class Calculator extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * 处理C键被按下的事件
+	 * 处理归零键被按下的事件
 	 */
-	private void handleC() {
+	public void handleC() {
 		// 初始化计算器的各种值
 		resultText.setText("0");
 		firstDigit = true;
@@ -259,7 +215,8 @@ public class Calculator extends JFrame implements ActionListener {
 	 * 
 	 * @param key
 	 */
-	private void handleOperator(String key) {
+	public void handleOperator(String key) {
+		// 运算符等于用户按的按钮
 		if (operator.equals("/")) {
 			// 除法运算
 			// 如果当前结果文本框中的值等于0
@@ -343,68 +300,18 @@ public class Calculator extends JFrame implements ActionListener {
 				resultText.setText(String.valueOf(resultNum));
 			}
 		}
-		// 运算符等于用户按的按钮
 		operator = key;
 		firstDigit = true;
 		operateValidFlag = true;
-	}
-
-	/**
-	 * 处理MC键被按下的事件
-	 */
-	private void handleMC() {
-		// 清零各种值
-		prenumber = 0;
-		resultText.setText("0");
-		firstDigit = true;
-		operator = "=";
-	}
-
-	
-
-	/**
-	 * 处理MR键被按下的事件
-	 */
-	private void handleMR() {
-		//存储器读出
-		resultNum = prenumber;
-		resultText.setText(String.valueOf(resultNum));
-		firstDigit = true;
-		operator = "=";
-	}
-
-	
-	/**
-	 * 处理MS键被按下的事件
-	 */
-	private void handleMS() {
-		// 存入存储器
-		prenumber = getNumberFromText();
 	
 	}
-
-	
-	
-	/**
-	 * 处理M+键被按下的事件
-	 */
-	private void handleMk() {
-		//放在内存中并加上
-		 prenumber +=  getNumberFromText();
-		resultText.setText("0");
-		firstDigit = true;
-		operator = "=";
-	}
-
-	
-	
 
 	/**
 	 * 从结果文本框中获取数字
 	 * 
 	 * @return
 	 */
-	private double getNumberFromText() {
+	public double getNumberFromText() {
 		double result = 0;
 		try {
 			result = Double.valueOf(resultText.getText()).doubleValue();
