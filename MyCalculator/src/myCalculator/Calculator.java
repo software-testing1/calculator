@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 /**
  * 一个计算器，与Windows附件自带计算器的标准版功能、界面相仿。 
+ * 1111
  */
 public class Calculator extends JFrame implements ActionListener {
 	/** 计算器上的键的显示名字 */
