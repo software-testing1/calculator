@@ -15,7 +15,7 @@ import javax.swing.JTextField;
  * 1111
  */
 public class Calculator extends JFrame implements ActionListener {
-	/** 计算器上的键的显示名字 */
+	/** 计算器上的键的显示名字。。 */
 	private final String[] KEYS = { "7", "8", "9", "/", "sqrt","x^2", "4", "5", "6",
 			"*", "%", "Abs","1", "2", "3", "-", "1/x","Int", "0", "+/-", ".", "+", "=" ,
 			"x^3","Sin","Cos","tan","ln","lg",""};
